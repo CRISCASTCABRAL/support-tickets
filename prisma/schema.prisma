@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  USER        // Usuario que reporta
+  TECHNICIAN  // Técnico encargado
+  ADMIN       // Administrador
+}
+
+enum IncidentType {
+  SYSTEM_FAILURE    // Falla del sistema
+  HARDWARE_ISSUE    // Problema de hardware/PC
+  NETWORK_ISSUE     // Problema de red/internet
+}
+
+enum IncidentStatus {
+  OPEN        // Abierto
+  IN_PROGRESS // En progreso
+  RESOLVED    // Resuelto
+  CLOSED      // Cerrado
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  reportedIncidents Report[] @relation("ReportedBy")
+  assignedIncidents Report[] @relation("AssignedTo")
+  comments          Comment[]
+  activityLogs      ActivityLog[]
+
+  @@map("users")
+}
+
+model Report {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  type        IncidentType
+  status      IncidentStatus @default(OPEN)
+  priority    Priority       @default(MEDIUM)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  // Información adicional
+  location    String?        // Ubicación física
+  equipment   String?        // Equipo afectado
+  imageUrl    String?        // URL de imagen adjunta
+
+  // Relaciones
+  reportedById String
+  reportedBy   User   @relation("ReportedBy", fields: [reportedById], references: [id])
+  
+  assignedToId String?
+  assignedTo   User?   @relation("AssignedTo", fields: [assignedToId], references: [id])
+
+  comments Comment[]
+  logs     ActivityLog[]
+
+  @@map("reports")
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  
+  // Relaciones
+  reportId String
+  report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+
+  @@map("comments")
+}
+
+model ActivityLog {
+  id          String   @id @default(cuid())
+  action      String   // "created", "assigned", "status_changed", etc.
+  description String
+  createdAt   DateTime @default(now())
+
+  // Relaciones
+  reportId String
+  report   Report @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@map("activity_logs")
+}
