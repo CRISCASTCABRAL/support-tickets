@@ -1,0 +1,24 @@
+CONFIGURACIÓN COMPLETA PARA VERCEL
+=====================================
+
+Copia y pega exactamente estas variables en tu Vercel Dashboard:
+
+1. Ve a: https://vercel.com/dashboard
+2. Selecciona tu proyecto
+3. Ve a Settings → Environment Variables
+4. Agrega estas 3 variables:
+
+DATABASE_URL
+prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiZDE3ZWNmMTEtYmIyZC00ZTg3LWE3MDMtZDVlY2Y5MjQyNDEwIiwidGVuYW50X2lkIjoiMWJmM2E2NDNjM2Q3NGE1MDFlMjE5MTNkN2UzNTVkNmU3MDI2ZmU5NDk2NmFmZmI0MDY3NGZhNzEyMTdlN2QwNCIsImludGVybmFsX3NlY3JldCI6IjBkMGI5ODNkLWM4MzMtNDhkNS04YjNjLTlmNjhkZGEwOTM2NyJ9.BIjp9L6-fvOHovOWGCRlRh5dNf6Zqmz4aN4vYVaEyaY
+
+NEXTAUTH_URL
+https://tu-proyecto.vercel.app
+
+NEXTAUTH_SECRET
+0DCe4EwsibuvT5qdsxoa/q5UPJrYN/IdkfGKzWXif90=
+
+IMPORTANTE:
+- Cambia "tu-proyecto" por el nombre real de tu dominio de Vercel
+- Después de agregar las variables, haz clic en "Redeploy" en la pestaña Deployments
+
+5. Una vez configurado, redeploya el proyecto para aplicar los cambios

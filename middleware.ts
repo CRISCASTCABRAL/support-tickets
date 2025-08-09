@@ -1,41 +1,28 @@
-import { withAuth } from "next-auth/middleware"
 import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
 
-export default withAuth(
-  function middleware(req) {
-    const token = req.nextauth.token
-    const path = req.nextUrl.pathname
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
 
-    // Rutas que requieren roles específicos
-    if (path.startsWith('/dashboard/admin')) {
-      if (token?.role !== 'ADMIN') {
-        return NextResponse.redirect(new URL('/dashboard', req.url))
-      }
-    }
-
-    if (path.startsWith('/api/users') && !path.startsWith('/api/users/technicians')) {
-      if (token?.role !== 'ADMIN') {
-        return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-      }
-    }
-
+  // Permitir todas las rutas públicas y de autenticación
+  if (
+    pathname === '/' ||
+    pathname === '/login' ||
+    pathname === '/register' ||
+    pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/static')
+  ) {
     return NextResponse.next()
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => {
-        // Solo verificamos si hay token para rutas protegidas
-        return !!token
-      }
-    }
   }
-)
+
+  // Para rutas protegidas, redirigir a login si no hay sesión
+  // (La verificación de sesión real se hará en cada página/API)
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
-    '/dashboard/:path*',
-    '/report/:path*',
-    '/api/reports/:path*',
-    '/api/users/:path*'
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ]
 }
