@@ -7,9 +7,10 @@ import { CreateCommentSchema } from '@/lib/validations'
 // GET /api/reports/[id]/comments - Obtener comentarios de un reporte
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -60,9 +61,10 @@ export async function GET(
 // POST /api/reports/[id]/comments - Crear nuevo comentario
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })

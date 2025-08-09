@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { 
   FileText, 
   Clock, 
@@ -211,14 +212,14 @@ export default function DashboardPage() {
         <CardContent>
           <div className="flex flex-wrap gap-2">
             <Button asChild>
-              <a href="/report/new">Crear Nuevo Reporte</a>
+              <Link href="/report/new">Crear Nuevo Reporte</Link>
             </Button>
             <Button variant="outline" asChild>
-              <a href="/dashboard/reports">Ver Todos los Reportes</a>
+              <Link href="/dashboard/reports">Ver Todos los Reportes</Link>
             </Button>
             {(userRole === 'ADMIN' || userRole === 'TECHNICIAN') && (
               <Button variant="outline" asChild>
-                <a href="/dashboard/reports?status=OPEN">Ver Reportes Abiertos</a>
+                <Link href="/dashboard/reports?status=OPEN">Ver Reportes Abiertos</Link>
               </Button>
             )}
           </div>

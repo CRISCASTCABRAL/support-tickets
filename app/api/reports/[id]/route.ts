@@ -7,9 +7,10 @@ import { UpdateReportSchema } from '@/lib/validations'
 // GET /api/reports/[id] - Obtener reporte específico
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -72,9 +73,10 @@ export async function GET(
 // PUT /api/reports/[id] - Actualizar reporte
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session) {
       return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
@@ -159,9 +161,10 @@ export async function PUT(
 // DELETE /api/reports/[id] - Eliminar reporte (solo admins)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session || session.user.role !== 'ADMIN') {
       return NextResponse.json(

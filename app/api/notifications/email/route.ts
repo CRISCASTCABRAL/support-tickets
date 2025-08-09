@@ -47,14 +47,14 @@ export async function POST(request: NextRequest) {
         )
     }
 
-    if (result.success) {
+    if (result && result.success) {
       return NextResponse.json({
         message: 'Notificación enviada exitosamente',
         result
       })
     } else {
       return NextResponse.json(
-        { error: 'Error enviando notificación', details: result.error },
+        { error: 'Error enviando notificación', details: result?.error },
         { status: 500 }
       )
     }

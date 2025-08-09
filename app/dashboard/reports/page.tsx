@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { useSession } from 'next-auth/react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -19,7 +19,7 @@ interface ReportsResponse {
   }
 }
 
-export default function ReportsPage() {
+function ReportsContent() {
   const { data: session } = useSession()
   const searchParams = useSearchParams()
   const [data, setData] = useState<ReportsResponse | null>(null)
@@ -178,5 +178,24 @@ export default function ReportsPage() {
         />
       )}
     </div>
+  )
+}
+
+export default function ReportsPage() {
+  return (
+    <Suspense fallback={
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Reportes</h1>
+        </div>
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="h-20 bg-white rounded-lg" />
+          ))}
+        </div>
+      </div>
+    }>
+      <ReportsContent />
+    </Suspense>
   )
 }

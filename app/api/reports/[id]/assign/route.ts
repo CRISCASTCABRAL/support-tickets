@@ -7,9 +7,10 @@ import { IncidentStatus } from '@prisma/client'
 // PUT /api/reports/[id]/assign - Asignar técnico a reporte
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const session = await getServerSession(authOptions)
     if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'TECHNICIAN')) {
       return NextResponse.json(
