@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { useSession } from "next-auth/react"
 import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -56,19 +56,7 @@ export default function UsersPage() {
     role: "USER" as "USER" | "TECHNICIAN" | "ADMIN"
   })
 
-  useEffect(() => {
-    if (status === "loading") return
-    if (!session) redirect("/login")
-    
-    const currentUserRole = (session.user as any)?.role
-    if (currentUserRole !== "ADMIN" && currentUserRole !== "TECHNICIAN") {
-      redirect("/dashboard")
-    }
-    
-    fetchUsers()
-  }, [session, status, pagination.page, search, roleFilter])
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true)
       const params = new URLSearchParams({
@@ -100,7 +88,19 @@ export default function UsersPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [pagination.page, pagination.limit, search, roleFilter, toast])
+
+  useEffect(() => {
+    if (status === "loading") return
+    if (!session) redirect("/login")
+    
+    const currentUserRole = (session.user as any)?.role
+    if (currentUserRole !== "ADMIN" && currentUserRole !== "TECHNICIAN") {
+      redirect("/dashboard")
+    }
+    
+    fetchUsers()
+  }, [session, status, pagination.page, search, roleFilter, fetchUsers])
 
   const handleCreateUser = async (e: React.FormEvent) => {
     e.preventDefault()

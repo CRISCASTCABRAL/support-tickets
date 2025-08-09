@@ -12,7 +12,10 @@
       "Bash(git add:*)",
       "Bash(git push:*)",
       "Bash(cat:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(gh repo view:*)",
+      "Bash(npx shadcn-ui:*)",
+      "Bash(npx shadcn@latest add:*)"
     ],
     "deny": []
   }

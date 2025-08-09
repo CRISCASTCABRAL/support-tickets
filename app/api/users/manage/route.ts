@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
         createdAt: true,
         _count: {
           select: {
-            reportsCreated: {
+            reportedIncidents: {
               where: {
                 status: {
                   in: ["OPEN", "IN_PROGRESS"]
@@ -84,8 +84,8 @@ export async function GET(request: NextRequest) {
 
     const usersWithTicketStatus = users.map(user => ({
       ...user,
-      hasOpenTickets: user._count.reportsCreated > 0,
-      openTicketsCount: user._count.reportsCreated
+      hasOpenTickets: user._count.reportedIncidents > 0,
+      openTicketsCount: user._count.reportedIncidents
     }))
 
     return NextResponse.json({
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Datos inválidos", details: error.errors },
+        { error: "Datos inválidos", details: error.issues },
         { status: 400 }
       )
     }
@@ -227,7 +227,7 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Datos inválidos", details: error.errors },
+        { error: "Datos inválidos", details: error.issues },
         { status: 400 }
       )
     }
