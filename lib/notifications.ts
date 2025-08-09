@@ -1,7 +1,14 @@
 import { Resend } from 'resend'
 import { prisma } from './prisma'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+let resend: Resend | null = null
+
+function getResendClient() {
+  if (!resend && process.env.RESEND_API_KEY) {
+    resend = new Resend(process.env.RESEND_API_KEY)
+  }
+  return resend
+}
 
 interface EmailTemplate {
   to: string
@@ -13,7 +20,9 @@ export class NotificationService {
   
   // Enviar email genérico
   static async sendEmail({ to, subject, html }: EmailTemplate) {
-    if (!process.env.RESEND_API_KEY) {
+    const resendClient = getResendClient()
+    
+    if (!resendClient) {
       console.log('RESEND_API_KEY no configurado - simulando envío de email')
       console.log(`Para: ${to}`)
       console.log(`Asunto: ${subject}`)
@@ -21,7 +30,7 @@ export class NotificationService {
     }
 
     try {
-      const { data, error } = await resend.emails.send({
+      const { data, error } = await resendClient.emails.send({
         from: 'Sistema de Reportes <noreply@tickets.com>',
         to: [to],
         subject,
