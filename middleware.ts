@@ -7,12 +7,6 @@ export default withAuth(
     const path = req.nextUrl.pathname
 
     // Rutas que requieren roles específicos
-    if (path.startsWith('/dashboard')) {
-      if (!token) {
-        return NextResponse.redirect(new URL('/login', req.url))
-      }
-    }
-
     if (path.startsWith('/dashboard/admin')) {
       if (token?.role !== 'ADMIN') {
         return NextResponse.redirect(new URL('/dashboard', req.url))
@@ -29,20 +23,8 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token, req }) => {
-        const path = req.nextUrl.pathname
-
-        // Rutas públicas
-        if (path === '/' || path === '/login' || path === '/register') {
-          return true
-        }
-
-        // API de registro (pública)
-        if (path === '/api/auth/register') {
-          return true
-        }
-
-        // Otras rutas requieren autenticación
+      authorized: ({ token }) => {
+        // Solo verificamos si hay token para rutas protegidas
         return !!token
       }
     }
@@ -54,7 +36,6 @@ export const config = {
     '/dashboard/:path*',
     '/report/:path*',
     '/api/reports/:path*',
-    '/api/users/:path*',
-    '/api/auth/register'
+    '/api/users/:path*'
   ]
 }
