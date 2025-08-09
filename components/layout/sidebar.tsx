@@ -36,37 +36,62 @@ export function Sidebar({ className }: SidebarProps) {
       href: '/dashboard',
       icon: Home,
       current: pathname === '/dashboard'
-    },
-    {
-      name: 'Reportes',
-      href: '/dashboard/reports',
-      icon: FileText,
-      current: pathname.startsWith('/dashboard/reports')
-    },
-    {
-      name: 'Nuevo Reporte',
-      href: '/report/new',
-      icon: Plus,
-      current: pathname === '/report/new'
     }
   ]
 
-  // Agregar navegación de admin
-  if (session?.user.role === 'ADMIN') {
+  // Usuarios solo pueden crear reportes y ver los suyos
+  if (session?.user.role === 'USER') {
     navigation.push(
       {
-        name: 'Usuarios',
-        href: '/dashboard/users',
-        icon: Users,
-        current: pathname.startsWith('/dashboard/users')
+        name: 'Mis Reportes',
+        href: '/dashboard/reports',
+        icon: FileText,
+        current: pathname.startsWith('/dashboard/reports')
       },
       {
-        name: 'Estadísticas',
-        href: '/dashboard/analytics',
-        icon: BarChart3,
-        current: pathname.startsWith('/dashboard/analytics')
+        name: 'Nuevo Reporte',
+        href: '/report/new',
+        icon: Plus,
+        current: pathname === '/report/new'
       }
     )
+  }
+
+  // Técnicos y administradores pueden ver todos los reportes
+  if (session?.user.role === 'TECHNICIAN' || session?.user.role === 'ADMIN') {
+    navigation.push(
+      {
+        name: 'Todos los Reportes',
+        href: '/dashboard/reports',
+        icon: FileText,
+        current: pathname.startsWith('/dashboard/reports')
+      },
+      {
+        name: 'Nuevo Reporte',
+        href: '/report/new',
+        icon: Plus,
+        current: pathname === '/report/new'
+      }
+    )
+  }
+
+  // Agregar navegación según rol
+  if (session?.user.role === 'ADMIN' || session?.user.role === 'TECHNICIAN') {
+    navigation.push({
+      name: 'Usuarios',
+      href: '/dashboard/users',
+      icon: Users,
+      current: pathname.startsWith('/dashboard/users')
+    })
+  }
+
+  if (session?.user.role === 'ADMIN') {
+    navigation.push({
+      name: 'Estadísticas',
+      href: '/dashboard/analytics',
+      icon: BarChart3,
+      current: pathname.startsWith('/dashboard/analytics')
+    })
   }
 
   navigation.push({
