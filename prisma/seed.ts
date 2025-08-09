@@ -40,12 +40,12 @@ async function main() {
     },
   })
 
-  // Crear reportes de ejemplo
+  // Crear reportes de ejemplo con los nuevos tipos
   const report1 = await prisma.report.create({
     data: {
-      title: 'Sistema lento en el área de contabilidad',
-      description: 'El sistema ERP está funcionando muy lento desde esta mañana. Los usuarios no pueden procesar facturas de manera eficiente.',
-      type: IncidentType.SYSTEM_FAILURE,
+      title: 'Computadora muy lenta para procesar facturas',
+      description: 'El sistema ERP está funcionando muy lento desde esta mañana. Los usuarios no pueden procesar facturas de manera eficiente. La PC tarda más de 5 minutos en abrir Excel.',
+      type: IncidentType.COMPUTER_SLOW,
       priority: Priority.HIGH,
       status: IncidentStatus.OPEN,
       location: 'Oficina Contabilidad - Piso 2',
@@ -57,9 +57,9 @@ async function main() {
 
   const report2 = await prisma.report.create({
     data: {
-      title: 'Computadora no enciende',
-      description: 'La computadora del escritorio 15 no enciende. Se escucha un beep continuo al presionar el botón de encendido.',
-      type: IncidentType.HARDWARE_ISSUE,
+      title: 'Mouse y teclado no responden correctamente',
+      description: 'El mouse se congela cada pocos minutos y el teclado a veces no registra las teclas presionadas. Muy difícil trabajar así.',
+      type: IncidentType.HARDWARE_MALFUNCTION,
       priority: Priority.CRITICAL,
       status: IncidentStatus.IN_PROGRESS,
       location: 'Sala de Trabajo - Piso 1',
@@ -71,14 +71,39 @@ async function main() {
 
   const report3 = await prisma.report.create({
     data: {
-      title: 'Internet intermitente en oficina',
-      description: 'La conexión a internet se corta cada 10-15 minutos. Afecta principalmente el área de ventas.',
-      type: IncidentType.NETWORK_ISSUE,
+      title: 'No puedo conectarme a internet desde mi escritorio',
+      description: 'La conexión a internet se corta cada 10-15 minutos. No puedo acceder a páginas web ni recibir emails. Afecta mi productividad.',
+      type: IncidentType.INTERNET_CONNECTION,
       priority: Priority.MEDIUM,
       status: IncidentStatus.RESOLVED,
       location: 'Área de Ventas',
       reportedById: user.id,
       assignedToId: technician.id,
+    },
+  })
+
+  const report4 = await prisma.report.create({
+    data: {
+      title: 'Impresora no imprime documentos importantes',
+      description: 'La impresora HP del segundo piso se atasca constantemente con las hojas. Necesito imprimir contratos urgentes.',
+      type: IncidentType.PRINTER_PROBLEMS,
+      priority: Priority.HIGH,
+      status: IncidentStatus.OPEN,
+      location: 'Oficina Principal - Piso 2',
+      equipment: 'Impresora HP LaserJet Pro',
+      reportedById: user.id,
+    },
+  })
+
+  const report5 = await prisma.report.create({
+    data: {
+      title: 'Olvidé mi contraseña del sistema de nómina',
+      description: 'No puedo acceder al sistema de nómina porque olvidé mi contraseña. Necesito procesarlos pagos de fin de mes.',
+      type: IncidentType.PASSWORD_RESET,
+      priority: Priority.MEDIUM,
+      status: IncidentStatus.OPEN,
+      location: 'RRHH - Piso 3',
+      reportedById: user.id,
     },
   })
 
@@ -118,7 +143,7 @@ async function main() {
     },
   })
 
-  console.log({ admin, technician, user, report1, report2, report3 })
+  console.log({ admin, technician, user, report1, report2, report3, report4, report5 })
 }
 
 main()

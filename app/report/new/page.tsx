@@ -34,7 +34,7 @@ export default function NewReportPage() {
   } = useForm<CreateReportInput>({
     resolver: zodResolver(CreateReportSchema),
     defaultValues: {
-      type: IncidentType.SYSTEM_FAILURE,
+      type: IncidentType.COMPUTER_SLOW,
       priority: Priority.MEDIUM
     }
   })
@@ -78,9 +78,16 @@ export default function NewReportPage() {
   }
 
   const incidentTypes = [
-    { value: IncidentType.SYSTEM_FAILURE, label: 'Falla del Sistema' },
-    { value: IncidentType.HARDWARE_ISSUE, label: 'Problema de Hardware/PC' },
-    { value: IncidentType.NETWORK_ISSUE, label: 'Problema de Red/Internet' }
+    { value: IncidentType.COMPUTER_SLOW, label: 'PC Lento o con Bajo Rendimiento', icon: '🐌' },
+    { value: IncidentType.INTERNET_CONNECTION, label: 'Problemas de Conexión a Internet', icon: '🌐' },
+    { value: IncidentType.EMAIL_ISSUES, label: 'Problemas con Correo Electrónico', icon: '📧' },
+    { value: IncidentType.PRINTER_PROBLEMS, label: 'Impresora no Funciona o Atascos', icon: '🖨️' },
+    { value: IncidentType.SOFTWARE_CRASH, label: 'Aplicaciones se Cierran Inesperadamente', icon: '💥' },
+    { value: IncidentType.PASSWORD_RESET, label: 'Olvido de Contraseñas o Bloqueo de Cuenta', icon: '🔐' },
+    { value: IncidentType.FILE_ACCESS, label: 'No Puede Acceder a Archivos o Carpetas', icon: '📁' },
+    { value: IncidentType.HARDWARE_MALFUNCTION, label: 'Teclado, Mouse, Monitor no Funcionan', icon: '⌨️' },
+    { value: IncidentType.VIRUS_MALWARE, label: 'Sospecha de Virus o Malware', icon: '🦠' },
+    { value: IncidentType.SYSTEM_UPDATE, label: 'Problemas con Actualizaciones del Sistema', icon: '🔄' }
   ]
 
   const priorities = [
@@ -201,7 +208,10 @@ export default function NewReportPage() {
                     <SelectContent>
                       {incidentTypes.map((type) => (
                         <SelectItem key={type.value} value={type.value}>
-                          {type.label}
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg">{type.icon}</span>
+                            <span>{type.label}</span>
+                          </div>
                         </SelectItem>
                       ))}
                     </SelectContent>

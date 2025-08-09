@@ -17,9 +17,22 @@ enum UserRole {
 }
 
 enum IncidentType {
-  SYSTEM_FAILURE    // Falla del sistema
-  HARDWARE_ISSUE    // Problema de hardware/PC
-  NETWORK_ISSUE     // Problema de red/internet
+  // Valores antiguos (mantener compatibilidad)
+  SYSTEM_FAILURE         // Falla del sistema (DEPRECATED)
+  HARDWARE_ISSUE         // Problema de hardware/PC (DEPRECATED)  
+  NETWORK_ISSUE          // Problema de red/internet (DEPRECATED)
+  
+  // Nuevos valores específicos
+  COMPUTER_SLOW          // PC lento o con bajo rendimiento
+  INTERNET_CONNECTION    // Problemas de conexión a internet
+  EMAIL_ISSUES          // Problemas con correo electrónico
+  PRINTER_PROBLEMS      // Impresora no funciona o atascos
+  SOFTWARE_CRASH        // Aplicaciones se cierran inesperadamente
+  PASSWORD_RESET        // Olvido de contraseñas o bloqueo de cuenta
+  FILE_ACCESS           // No puede acceder a archivos o carpetas compartidas
+  HARDWARE_MALFUNCTION  // Teclado, mouse, monitor no funcionan
+  VIRUS_MALWARE         // Sospecha de virus o malware
+  SYSTEM_UPDATE         // Problemas con actualizaciones del sistema
 }
 
 enum IncidentStatus {

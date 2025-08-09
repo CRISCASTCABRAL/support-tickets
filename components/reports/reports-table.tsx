@@ -99,9 +99,22 @@ export function ReportsTable({
 
   const getTypeText = (type: string) => {
     switch (type) {
+      // Valores antiguos (compatibilidad)
       case 'SYSTEM_FAILURE': return 'Falla del Sistema'
       case 'HARDWARE_ISSUE': return 'Problema de Hardware'
       case 'NETWORK_ISSUE': return 'Problema de Red'
+      
+      // Nuevos valores específicos
+      case 'COMPUTER_SLOW': return 'PC Lento'
+      case 'INTERNET_CONNECTION': return 'Conexión a Internet'
+      case 'EMAIL_ISSUES': return 'Problemas de Email'
+      case 'PRINTER_PROBLEMS': return 'Problemas de Impresora'
+      case 'SOFTWARE_CRASH': return 'Aplicación se Cierra'
+      case 'PASSWORD_RESET': return 'Restablecer Contraseña'
+      case 'FILE_ACCESS': return 'Acceso a Archivos'
+      case 'HARDWARE_MALFUNCTION': return 'Hardware Defectuoso'
+      case 'VIRUS_MALWARE': return 'Virus/Malware'
+      case 'SYSTEM_UPDATE': return 'Actualización del Sistema'
       default: return type
     }
   }
@@ -162,9 +175,16 @@ export function ReportsTable({
                 <SelectValue placeholder="Tipo" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="SYSTEM_FAILURE">Falla del Sistema</SelectItem>
-                <SelectItem value="HARDWARE_ISSUE">Problema de Hardware</SelectItem>
-                <SelectItem value="NETWORK_ISSUE">Problema de Red</SelectItem>
+                <SelectItem value="COMPUTER_SLOW">🐌 PC Lento</SelectItem>
+                <SelectItem value="INTERNET_CONNECTION">🌐 Conexión a Internet</SelectItem>
+                <SelectItem value="EMAIL_ISSUES">📧 Problemas de Email</SelectItem>
+                <SelectItem value="PRINTER_PROBLEMS">🖨️ Problemas de Impresora</SelectItem>
+                <SelectItem value="SOFTWARE_CRASH">💥 Aplicación se Cierra</SelectItem>
+                <SelectItem value="PASSWORD_RESET">🔐 Restablecer Contraseña</SelectItem>
+                <SelectItem value="FILE_ACCESS">📁 Acceso a Archivos</SelectItem>
+                <SelectItem value="HARDWARE_MALFUNCTION">⌨️ Hardware Defectuoso</SelectItem>
+                <SelectItem value="VIRUS_MALWARE">🦠 Virus/Malware</SelectItem>
+                <SelectItem value="SYSTEM_UPDATE">🔄 Actualización del Sistema</SelectItem>
               </SelectContent>
             </Select>
 
