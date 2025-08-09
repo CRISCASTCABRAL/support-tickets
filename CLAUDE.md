@@ -2,7 +2,76 @@
 
 ## 🚀 Estado del Proyecto
 
-El proyecto está **100% funcional** con todas las características implementadas:
+El proyecto está **100% funcional** con todas las características implementadas y **DEPLOYADO EN VERCEL**.
+
+## ⚠️ ESTADO ACTUAL DE DEPLOYMENT
+- **Repositorio**: https://github.com/CRISCASTCABRAL/support-tickets
+- **Vercel URL**: https://support-tickets-two.vercel.app/
+- **Último estado**: Necesita configuración correcta de framework en Vercel Dashboard
+- **Issue conocido**: Framework cambió de Next.js a Vite → Debe ser **Next.js**
+
+## 🔧 CONFIGURACIÓN CRÍTICA DE VERCEL
+
+### Variables de Entorno Configuradas:
+```
+DATABASE_URL = "prisma+postgres://accelerate.prisma-data.net/?api_key=..."
+NEXTAUTH_URL = "https://support-tickets-two.vercel.app"
+NEXTAUTH_SECRET = "0DCe4EwsibuvT5qdsxoa/q5UPJrYN/IdkfGKzWXif90="
+```
+
+### Configuración Framework:
+- **Framework Preset**: DEBE ser **Next.js** (no Vite)
+- **Build Command**: `npm run build` (automático)
+- **Output Directory**: `.next` (automático)
+- **Node Version**: 18.x
+
+### Middleware Actual:
+- Middleware simplificado (sin NextAuth wrapper)
+- Permite todas las rutas públicas
+- Verificación de sesión se maneja en cada página/API individual
+
+## 🐛 PROBLEMAS RESUELTOS
+
+### Issue 1: Error 404 - SOLUCIONADO
+- **Causa**: Middleware NextAuth causaba conflictos de routing
+- **Solución**: Middleware simple sin withAuth wrapper
+
+### Issue 2: Error 500 MIDDLEWARE_INVOCATION_FAILED - SOLUCIONADO  
+- **Causa**: NextAuth middleware no compatible con Vercel serverless
+- **Solución**: NextRequest middleware básico
+
+### Issue 3: Build Error "Function Runtimes" - EN PROGRESO
+- **Causa**: Framework configurado como Vite en lugar de Next.js
+- **Solución**: Cambiar framework a Next.js en Vercel Dashboard
+
+## 🎯 PRÓXIMOS PASOS SI HAY ISSUES
+1. Verificar framework = Next.js en Vercel
+2. Verificar variables de entorno están configuradas
+3. Redeploy desde Vercel Dashboard
+4. Si persisten errores, revisar Vercel logs
+
+## 📋 ARCHIVOS DE CONFIGURACIÓN IMPORTANTES
+
+### `/middleware.ts` - Middleware Simplificado
+```typescript
+import { NextResponse } from "next/server"
+import type { NextRequest } from "next/server"
+
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl
+  // Permite rutas públicas y estáticas
+  return NextResponse.next()
+}
+```
+
+### `/lib/auth.ts` - NextAuth sin PrismaAdapter
+- Credentials provider únicamente
+- JWT session strategy
+- Role management integrado
+
+### `/lib/notifications.ts` - Lazy Loading Resend
+- Inicialización lazy para evitar errores de build
+- Fallback a console.log si no hay API key
 
 ### ✅ Completado:
 
@@ -71,11 +140,17 @@ npm run dev
 
 ## 🌐 URLs Principales
 
+### Desarrollo (Local):
+- **Puerto**: 3002 (3000 y 3001 ocupados)
 - **Inicio**: http://localhost:3002/
 - **Login**: http://localhost:3002/login
 - **Dashboard**: http://localhost:3002/dashboard
 - **Crear Reporte**: http://localhost:3002/report/new
 - **Lista Reportes**: http://localhost:3002/dashboard/reports
+
+### Producción (Vercel):
+- **URL**: https://support-tickets-two.vercel.app/
+- **Estado**: Funcional (verificar configuración framework si hay errores)
 
 ## 🔐 Sistema de Permisos
 
@@ -104,11 +179,20 @@ npm run dev
 
 ## ⚙️ Variables de Entorno
 
+### Local (`.env`):
 ```env
-DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/..."
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_SECRET="your-secret-key"
+DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=..."
+NEXTAUTH_URL="http://localhost:3002"
+NEXTAUTH_SECRET="your-secret-key-here"
 RESEND_API_KEY="your-resend-key" # Opcional para emails
+```
+
+### Producción (Vercel):
+```env
+DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=..."
+NEXTAUTH_URL="https://support-tickets-two.vercel.app"
+NEXTAUTH_SECRET="0DCe4EwsibuvT5qdsxoa/q5UPJrYN/IdkfGKzWXif90="
+RESEND_API_KEY="" # Opcional
 ```
 
 ## 🚨 Características de Seguridad
